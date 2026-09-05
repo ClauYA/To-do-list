@@ -1,79 +1,56 @@
+// input which is the task and it is going to be a string
+// A button that adds the input
+// a list that show the inputs 
+// a function next to it a delete a task and a check mark
+document.getElementById("add-button").onclick=addTask;
 
-//input is the amount of money the player has to bet and multiply the money for and amount it depends which item was matched
-
-//if you win: 
-
-//throw new error() it is like an alert that shows an error its knowledge no related to the problem here
-document.getElementById("spin-button").onclick=spin;
-document.getElementById("min-icon").onclick=substracMin;
-document.getElementById("max-icon").onclick=addMax;
-const reel=['exercise','egg','glass_cup','bedtime','nutrition']
-const minimumBet=5;
-const maximumBet=50;
-let balance=100;
-
-let winningAmount=2;
-function spin(yourBet)
-{	
-	yourBet=Number(document.getElementById('bet-amount').value)
-	
-	document.querySelector('#wallet').value=balance
-	for(let reelNum = 1; reelNum <= 3; reelNum++) 
-	{
-        for(let i = 0; i < reel.length; i++) 
-		{
-            document.getElementById(`reel${reelNum}-symbol${i+1}`).innerHTML = 
-            `<span class="material-symbols-outlined">${reel[Math.floor(Math.random()*reel.length)]}</span>`;
-        }
-    }
-	if(yourBet>=minimumBet && yourBet<=maximumBet && yourBet>0 && yourBet<=balance)
-	{
-		
-		if(document.getElementById('reel1-symbol3').innerText===document.getElementById('reel2-symbol3').innerText
-		 && document.getElementById('reel2-symbol3').innerText===document.getElementById('reel3-symbol3').innerText)
-		{
-			balance+=yourBet*winningAmount;
-			document.querySelector('#result').innerText="You won!";
-			document.querySelector('#wallet').value=balance;
-		}else{
-			balance-=yourBet;
-			document.querySelector('#result').innerText="You lost!";
-		}
-	}else if(balance===0){
-			alert("Game over!");
-	}else{
-		alert('Your bet is less than our mininum or max than our maxinumbet')
-	}
-	return `Remaining balance: $${balance}`;
-}
-
-function substracMin()
+var array=[]
+function addTask(cadena)
 {
-	let minNewBet=Number(document.getElementById('bet-amount').value)
-	if(minNewBet>minimumBet)
+	cadena=document.getElementById('task').value;
+	if(cadena!=='')
 	{
-		console.log(minNewBet)
-		minNewBet-=5
-		console.log(minNewBet)
-		document.querySelector('#bet-amount').value=minNewBet
+		array.push(cadena);
+		document.querySelector('#task').value=" ";
+		listTask(array);
 	}else{
-		document.querySelector('#min-max').innerText+='That is the mininum you can bet'
+		alert('You should have a string')
 	}
 	
 }
-function addMax()
+function listTask(array)
 {
-	let maxNewBet=Number(document.getElementById('bet-amount').value)
-	if(maxNewBet<maximumBet)
+	let html='';
+	for(let i=0;i<array.length;i++)
 	{
-		console.log(maxNewBet)
-		maxNewBet+=5
-		console.log(maxNewBet)
-		document.querySelector('#bet-amount').value=maxNewBet
-	}else{
-		console.log('reach max')
-		document.querySelector('#min-max').innerText+='That is the maximun you can bet'
+		html +=`<section class="task-row">
+				<input type="checkbox" id="mycheck${i}" onclick="underlineText(${i})" name="task-in-list"/>
+      			<label class="text-task" for="task-in-list">${array[i]}</label>
+				<span class="material-symbols-outlined delete-icon" onclick="deleteTask(${i})">delete</span>
+    			</section>`
 	}
+	document.querySelector('.task-list').innerHTML = html;
 }
 
 
+function deleteTask(index)
+{
+	
+	array.splice(index,1)
+	listTask(array)
+	//console.log(array)
+	//return console.log('hh');
+	
+}
+function underlineText(index)
+{
+	let valores=document.querySelectorAll('.task-row')[index]
+	let verifyCheck=valores.querySelector('input[type="checkbox"]')
+	console.log(valores)
+	if(verifyCheck.checked)
+	{
+		let text=valores.querySelector('label[class="text-task"]')
+		text.style.underlineText='line-through'
+	}
+
+}
